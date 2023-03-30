@@ -22,7 +22,7 @@ void PA_UpdateUserInfo(){
 		PA_UserInfo.Message[i] = PersonalData->message[i];
 
 	PA_UserInfo.Message[i] = 0; // To mark the end
-	PA_UserInfo.Language = PersonalData->_user_data.language;
+	PA_UserInfo.Language = PersonalData->language;
 }
 
 void PA_UpdateRTC(){
