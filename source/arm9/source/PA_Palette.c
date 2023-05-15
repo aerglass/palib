@@ -1,9 +1,9 @@
 #include <PA9.h>
 
-u8 PA_ExtPal[2][2]; // 0 si pas étendu, 1 sinon
+u8 PA_ExtPal[2][2]; // 0 si pas Ã©tendu, 1 sinon
 
 void PA_InitSpriteExtPal(void) {
-	// Palettes étendus pour les 256 couleurs...
+	// Palettes Ã©tendus pour les 256 couleurs...
 	vramSetBankG(VRAM_G_SPRITE_EXT_PALETTE);
 	vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
 	PA_ExtPal[0][0] = 1;
@@ -27,15 +27,15 @@ void PA_LoadSpriteExtPal(u8 screen, u16 palette_number, void* palette) {
 }
 
 void PA_InitBgExtPal(void) {
-	// Palettes étendus pour les 256 couleurs...
+	// Palettes Ã©tendus pour les 256 couleurs...
 	vramSetBankE(VRAM_E_BG_EXT_PALETTE);
 	vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
 	PA_ExtPal[1][0] = 1;
 	PA_ExtPal[1][1] = 1;
 	//DISPLAY_CR |= 1 << 30;
 	//SUB_DISPLAY_CR |= 1 << 30;
-	REG_DISPCNT |= DISPLAY_BG_EXT_PALETTE;
-	REG_DISPCNT_SUB |= DISPLAY_BG_EXT_PALETTE;
+  	bgExtPaletteEnable();
+  	bgExtPaletteEnableSub();
 	u8 i;
 
 	for (i = 0; i < 4; i++) { // On copie la palette partout
