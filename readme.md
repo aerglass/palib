@@ -1,2 +1,2 @@
 # palib
-it works on modern devkitarm.
+it works on modern devkitarm and dsi mode.
