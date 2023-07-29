@@ -1,1 +1,0 @@
-This folder contains the PAlib code for the ARM7 cores (including ASlib for those who need it)
