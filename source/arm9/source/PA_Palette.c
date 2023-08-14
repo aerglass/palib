@@ -49,13 +49,13 @@ void PA_LoadBgPalN(u8 screen, u8 bg_number, u8 pal_number, void* palette) {
 		vramSetBankE(VRAM_E_LCD);  // On passe en mode LCD pour pouvoir ecrire dessus, on reviendre en palette apres
 		//DMA_Copy(palette, VRAM_E + (bg_number << 13) + (pal_number << 9), 256, DMA_16NOW);
 		//New code
-		dmaCopy(palette,&VRAM_E_EXT_PALETTE[bg_number][pal_number],256);
+		dmaCopy(palette,&VRAM_E_EXT_PALETTE[bg_number][pal_number],512);
 		vramSetBankE(VRAM_E_BG_EXT_PALETTE);
 	} else {
 		vramSetBankH(VRAM_H_LCD);  // On passe en mode LCD pour pouvoir ecrire dessus, on reviendre en palette apres
 		//DMA_Copy(palette, VRAM_H + (bg_number << 13) + (pal_number << 9), 256, DMA_16NOW);
 		//new code
-		dmaCopy(palette,&VRAM_H_EXT_PALETTE[bg_number][pal_number],256);
+		dmaCopy(palette,&VRAM_H_EXT_PALETTE[bg_number][pal_number],512);
 		vramSetBankH(VRAM_H_SUB_BG_EXT_PALETTE);
 	}
 }
