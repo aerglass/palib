@@ -16,7 +16,6 @@ endif
 ifeq ($(strip $(DEVKITARM)),)
 $(error Please set DEVKITARM in your environment)
 endif
-include $(DEVKITARM)/ds_rules
 
 ifeq ($(strip $(MAKEFILE_VER)),)
 $(error Your makefile is outdated. Please use the one at $(DEVKITPRO)/PAlib/template)
@@ -30,11 +29,9 @@ ifneq ($(strip $(MAKEFILE_VER)),ver2)
 $(error Your PAlib version is outdated. Please go to http://www.palib-dev.com to get the latest)
 endif
 
-NITRODATA	:=	filesystem
-
 PATH   := $(DEVKITARM)/bin:$(PATH)
 PAPATH  = $(DEVKITPRO)/PAlib
-
+include $(DEVKITARM)/base_rules
 TEXT_TO_SAY_1 :=
 TEXT_TO_SAY_2 :=
 TEXT_TO_SAY_3 :=
@@ -52,20 +49,22 @@ ifeq ($(strip $(ARM7_SELECTED)),)
 	ARM7_SELECTED := ARM7_MP3
 endif
 
-ifeq ($(strip $(ARM7_SELECTED)), ARM7_MP3)
-	ARM7BIN    := $(PAPATH)/lib/arm7_mp3.bin
-	ARM7_IS_OK := YES
-endif
+#ifeq ($(strip $(ARM7_SELECTED)), ARM7_MP3)
+#	ARM7BIN    := $(PAPATH)/lib/default.elf
+#	ARM7_IS_OK := YES
+#endif
 
-ifeq ($(strip $(ARM7_SELECTED)), ARM7_MP3_DSWIFI)
-	ARM7BIN    := $(PAPATH)/lib/arm7_mp3_dswifi.bin
-	ARM7_IS_OK := YES
-endif
+#ifeq ($(strip $(ARM7_SELECTED)), ARM7_MP3_DSWIFI)
+#	ARM7BIN    := $(PAPATH)/lib/arm7_mp3_dswifi.bin
+#	ARM7_IS_OK := YES
+#endif
 
-ifeq ($(strip $(ARM7_SELECTED)), ARM7_MAXMOD_DSWIFI)
-	ARM7BIN    := $(PAPATH)/lib/arm7_maxmod_dswifi.bin
-	ARM7_IS_OK := YES
-endif
+#ifeq ($(strip $(ARM7_SELECTED)), ARM7_MAXMOD_DSWIFI)
+#	ARM7BIN    := $(PAPATH)/lib/arm7_maxmod_dswifi.bin
+#	ARM7_IS_OK := YES
+#endif
+ARM7BIN    := $(PAPATH)/lib/default.elf
+ARM7_IS_OK := YES
 
 ifeq ($(strip $(ARM7_IS_OK)),)
 	TEXT_TO_SAY_1 := The ARM7 core you selected is invalid: $(strip $(ARM7_SELECTED))
@@ -157,24 +156,15 @@ export OUTPUT := $(OUTPATH)/$(TARGET)
 export VPATH  := $(foreach dir,$(SOURCES),$(CURDIR)/$(dir)) \
                  $(foreach dir,$(DATA),$(CURDIR)/$(dir))
 
-ifneq ($(strip $(NITRODATA)),)
-	export NITRO_FILES	:=	$(CURDIR)/$(NITRODATA)
-endif
-
 # Determine the name of the tools
 
-#---------------------------------------------------------------------------------
-# use CXX for linking C++ projects, CC for standard C
-#---------------------------------------------------------------------------------
-ifeq ($(strip $(CPPFILES)),)
-#---------------------------------------------------------------------------------
-	export LD	:=	$(CC)
-#---------------------------------------------------------------------------------
-else
-#---------------------------------------------------------------------------------
-	export LD	:=	$(CXX)
-#---------------------------------------------------------------------------------
-endif
+PREFIX := arm-none-eabi-
+
+export CC      := $(PREFIX)gcc
+export CXX     := $(PREFIX)g++
+export AR      := $(PREFIX)ar
+export AS      := $(PREFIX)as
+export OBJCOPY := arm-none-eabi-objcopy
 
 # Collect source code files
 CFILES   := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.c)))
@@ -290,7 +280,7 @@ ifeq ($(strip $(MSG_IS_ERROR)),)
 	@echo
 	@[ -d $@ ] || mkdir -p $@
 	@[ -d $(OUTPATH) ] || mkdir -p $(OUTPATH)
-	@$(MAKE) --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
+	@make --no-print-directory -C $(BUILD) -f $(CURDIR)/Makefile
 endif
 
 #---------------------------------------------------------------------------------
@@ -324,6 +314,42 @@ ifneq ($(strip $(DONT_BUILD_MAXMOD_SOUNDBANK)), YES)
 	@echo
 	@mmutil $^ -d -osoundbank_bin.bin -hsoundbank.h
 endif
+
+#---------------------------------------------------------------------------------
+%.nds: %.bin
+#---------------------------------------------------------------------------------
+	@ndstool -c $@ -9 $(TARGET).elf -7 $(ARM7BIN) -b $(ICON) "$(TEXT1);$(TEXT2);$(TEXT3)" $(FILESYSTEM) > /dev/null
+	@echo
+	@echo Built: $(notdir $@)
+	@echo
+
+#---------------------------------------------------------------------------------
+%.bin: %.elf
+#---------------------------------------------------------------------------------
+	@$(OBJCOPY) -O binary $(TARGET).elf $(TARGET).bin
+
+#---------------------------------------------------------------------------------
+%.elf:
+#---------------------------------------------------------------------------------
+	@echo
+	@echo Linking...
+	@$(LD) $(LDFLAGS) $(OFILES) $(LIBPATHS) $(LIBS) -o $(TARGET).elf
+
+#---------------------------------------------------------------------------------
+# Rules to build source files
+#---------------------------------------------------------------------------------
+
+#---------------------------------------------------------------------------------
+%.o: %.cpp
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	@$(CXX) -MMD -MP -MF $(DEPSDIR)/$*.d $(CXXFLAGS) -c $< -o $@
+
+#---------------------------------------------------------------------------------
+%.o: %.c
+#---------------------------------------------------------------------------------
+	@echo $(notdir $<)
+	@$(CC) -MMD -MP -MF $(DEPSDIR)/$*.d $(CFLAGS) -c $< -o $@
 
 #---------------------------------------------------------------------------------
 %.o: %.s
