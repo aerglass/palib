@@ -63,7 +63,7 @@ endif
 #	ARM7BIN    := $(PAPATH)/lib/arm7_maxmod_dswifi.bin
 #	ARM7_IS_OK := YES
 #endif
-ARM7BIN    := $(PAPATH)/lib/default.elf
+ARM7BIN    := $(DEVKITPRO)/libnds/default.elf
 ARM7_IS_OK := YES
 
 ifeq ($(strip $(ARM7_IS_OK)),)
