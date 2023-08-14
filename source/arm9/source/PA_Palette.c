@@ -17,11 +17,11 @@ void PA_InitSpriteExtPal(void) {
 void PA_LoadSpriteExtPal(u8 screen, u16 palette_number, void* palette) {
 	if (screen == 0) {
 		vramSetBankG(VRAM_G_LCD);  // On passe en mode LCD pour pouvoir ecrire dessus, on reviendre en palette apres
-		dmaCopy(palette,VRAM_G_EXT_SPR_PALETTE[palette_number],256);
+		dmaCopy(palette,VRAM_G_EXT_SPR_PALETTE[palette_number],512);
 		vramSetBankG(VRAM_G_SPRITE_EXT_PALETTE);
 	} else {
 		vramSetBankI(VRAM_I_LCD);  // On passe en mode LCD pour pouvoir ecrire dessus, on reviendre en palette apres
-		dmaCopy(palette,VRAM_I_EXT_SPR_PALETTE[palette_number],256);
+		dmaCopy(palette,VRAM_I_EXT_SPR_PALETTE[palette_number],512);
 		vramSetBankI(VRAM_I_SUB_SPRITE_EXT_PALETTE);
 	}
 }
