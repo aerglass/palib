@@ -7,8 +7,8 @@ void PA_Init(bool sound){
 	fifoInit();
 
 	// Quick and dirty VBlank sleep
-	while(REG_VCOUNT >= 192);
-	while(REG_VCOUNT < 192);
+	while(REG_VCOUNT >= 192){}
+	while(REG_VCOUNT < 192){}
 
 	// Housekeeping
 	readUserSettings();
@@ -18,11 +18,12 @@ void PA_Init(bool sound){
 	PA_InitFifo();
 
 	// Initialize sound if requested
-	if(sound) enableSound();
+	if(sound) {enableSound();}
 
 	// Some libnds initializations...
 	initClockIRQ(); // init clock
 	installSystemFIFO(); // needed by some libnds functions
+	touchInit();
 	SetYtrigger(80); // needed by the touch screen code
 	micOn(); // init microphone
 
