@@ -28,7 +28,7 @@ typedef struct {
 	vuint8 micvol;
 	/// Extra field - used as padding for now.
 	vuint8 extra;
-
+	
 	/// Legacy IPC field
 	LEGACY vuint32 mailData;
 } PA_TransferRegion;

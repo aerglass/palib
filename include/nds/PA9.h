@@ -108,6 +108,7 @@ extern "C"{
 #include "arm9/PA_Debug.h"
 
 #include "arm9/as_lib9.h"
+#include "PA_LEGACY_IPC.h"
 
 #ifdef __cplusplus
 }

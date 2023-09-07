@@ -55,7 +55,7 @@ ifneq ($(BUILD),$(notdir $(CURDIR)))
 #---------------------------------------------------------------------------------
  
 #export ARM7BIN	:=	../../../lib/$(TARGET)/arm7.bin
-export ARM7BIN	:=	../../../lib/$(TARGET).bin
+export ARM7BIN	:=	../../../lib/$(TARGET).elf
 export ARM7ELF	:=	arm7.elf
 export DEPSDIR	:=	$(CURDIR)/$(BUILD)
 
@@ -111,8 +111,6 @@ DEPENDS	:=	$(OFILES:.o=.d)
 # main targets
 #---------------------------------------------------------------------------------
 $(ARM7BIN)	:	$(ARM7ELF)
-	@$(OBJCOPY) -O binary $< $@
-	@echo built ... $(notdir $@)
 
 
 $(ARM7ELF)	:	$(OFILES)

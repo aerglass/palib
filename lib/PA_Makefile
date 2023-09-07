@@ -41,8 +41,41 @@ MSG_IS_ERROR  :=
 
 # ARM7BINs are broken, linking default arm7.
 
-ARM7BIN    := $(DEVKITPRO)/libnds/default.elf
-ARM7_IS_OK := YES
+ARM7_IS_OK :=
+
+ifeq ($(strip $(ARM7_SELECTED)),)
+	TEXT_TO_SAY_1 := You forgot to select an ARM7 core! ARM7_MP3 will be selected by default.
+	TEXT_TO_SAY_2 := To select an ARM7 core, uncomment the line of the makefile that specifies
+	TEXT_TO_SAY_3 := the ARM7 core you want.
+	NL_AND_PAUSE  := YES
+	ARM7_SELECTED := ARM7_MP3
+endif
+
+ifeq ($(strip $(ARM7_SELECTED)), ARM7_MP3)
+	ARM7BIN    := $(PAPATH)/lib/arm7_mp3.elf
+	ARM7_IS_OK := YES
+endif
+
+ifeq ($(strip $(ARM7_SELECTED)), ARM7_MP3_DSWIFI)
+	ARM7BIN    := $(PAPATH)/lib/arm7_mp3_dswifi.elf
+	ARM7_IS_OK := YES
+endif
+
+ifeq ($(strip $(ARM7_SELECTED)), ARM7_MAXMOD_DSWIFI)
+	ARM7BIN    := $(PAPATH)/lib/arm7_maxmod_dswifi.elf
+	ARM7_IS_OK := YES
+endif
+
+ifeq ($(strip $(ARM7_IS_OK)),)
+	TEXT_TO_SAY_1 := The ARM7 core you selected is invalid: $(strip $(ARM7_SELECTED))
+	TEXT_TO_SAY_2 := ARM7_MP3 will be selected by default.
+	TEXT_TO_SAY_3 := To select a proper ARM7 core, uncomment the line of the makefile
+	TEXT_TO_SAY_4 := that specifies the ARM7 core you want.
+	NL_AND_PAUSE   = YES
+	ARM7_SELECTED := ARM7_MP3
+	ARM7BIN       := $(PAPATH)/lib/arm7_mp3.elf
+endif
+
 
 # Icon
 ifeq ($(strip $(wildcard $(CURDIR)/../logo.bmp)),)
