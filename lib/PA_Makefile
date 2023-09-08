@@ -174,9 +174,9 @@ SFILES   := $(foreach dir,$(SOURCES),$(notdir $(wildcard $(dir)/*.s)))
 
 # Use CXX to link C++ projects or CC for standard C
 ifeq ($(strip $(CPPFILES)),)
-	export LD := $(CC)
+	export LD := $(CC) -z noexecstack 
 else
-	export LD := $(CXX)
+	export LD := $(CXX) -z noexecstack 
 endif
 
 # Collect resource files
