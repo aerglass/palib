@@ -7,8 +7,8 @@ s16 pa_freetextures;
 #define N_TEXTURES 1024
 
 u16 n_free_mem3D; // nombre d'emplacements libres
-u16 used_mem3D[16384]; // Note la quantité de mémoire utilisée en chaque point de la mémoire pour pouvoir effacer les gfx...
-s16 obj_per_gfx3D[N_TEXTURES]; // Nombre de sprites utilisant un gfx donné...
+u16 used_mem3D[16384]; // Note la quantitï¿½ de mï¿½moire utilisï¿½e en chaque point de la mï¿½moire pour pouvoir effacer les gfx...
+s16 obj_per_gfx3D[N_TEXTURES]; // Nombre de sprites utilisant un gfx donnï¿½...
 mem_usage free_mem3D[16384];
 
 type_3danims sprite3danims[PA_NMAXSPRITES];
@@ -206,37 +206,37 @@ void PA_3DDeleteTex(u32 tex_gfx){
 	u16 i;
 	u16 j;
 	u8 exit = 0;
-	s8 decal = 0; // Décalage que l'on aura à faire pour classer le tableau...
+	s8 decal = 0; // Dï¿½calage que l'on aura ï¿½ faire pour classer le tableau...
 	obj_per_gfx3D[tex_gfx] = 0;
 	freetexslots[pa_freetextures] = tex_gfx;
 	pa_freetextures ++;
 	tex_gfx = (textures[tex_gfx] & (0xFFFF)) >> 1;
 
-	// Gestion dynamique de la mémoire...
-	for(i = 0; ((i < n_free_mem3D) && !exit); i ++){ // On regarde les différents emplacements mémoire pour ajouter le morceau libre dans le tas...
-		if(tex_gfx < free_mem3D[i].mem_block){ // Si on a un trou qui précède le premier trou dispo, on va devoir tout décaler...peut-etre !
-			exit = 1; // On va pourvoir sortir, après avir ordonné le tableau...
+	// Gestion dynamique de la mï¿½moire...
+	for(i = 0; ((i < n_free_mem3D) && !exit); i ++){ // On regarde les diffï¿½rents emplacements mï¿½moire pour ajouter le morceau libre dans le tas...
+		if(tex_gfx < free_mem3D[i].mem_block){ // Si on a un trou qui prï¿½cï¿½de le premier trou dispo, on va devoir tout dï¿½caler...peut-etre !
+			exit = 1; // On va pourvoir sortir, aprï¿½s avir ordonnï¿½ le tableau...
 			decal = 1;
 
-			if((i > 0) && (tex_gfx > 0) && (free_mem3D[i - 1].mem_block + free_mem3D[i - 1].free == tex_gfx)){ // On a 2 cases côtes à côtes, donc pas besoin de décaler, on ajouter la mem dispo...
+			if((i > 0) && (tex_gfx > 0) && (free_mem3D[i - 1].mem_block + free_mem3D[i - 1].free == tex_gfx)){ // On a 2 cases cï¿½tes ï¿½ cï¿½tes, donc pas besoin de dï¿½caler, on ajouter la mem dispo...
 				free_mem3D[i-1].free += used_mem3D[tex_gfx];
 				tex_gfx = free_mem3D[i-1].mem_block;
 				used_mem3D[tex_gfx] = free_mem3D[i-1].free;
 				decal = 0;
 			}
 
-			if(tex_gfx + used_mem3D[tex_gfx] == free_mem3D[i].mem_block){ // Si le bloc d'après suit parfaitement le bloc qu'on vient d'ajouter...
+			if(tex_gfx + used_mem3D[tex_gfx] == free_mem3D[i].mem_block){ // Si le bloc d'aprï¿½s suit parfaitement le bloc qu'on vient d'ajouter...
 				-- decal;
 				free_mem3D[i].mem_block = tex_gfx;
 				free_mem3D[i].free += used_mem3D[tex_gfx];
 			}
 
-			// Si le décalage est de 0, on touche à rien
-			if(decal == -1){ // On doit décaler vers la gauche... les données sont déjà dans le tableau
+			// Si le dï¿½calage est de 0, on touche ï¿½ rien
+			if(decal == -1){ // On doit dï¿½caler vers la gauche... les donnï¿½es sont dï¿½jï¿½ dans le tableau
 				for(j = i - 1; j < n_free_mem3D; j ++) // On recopie la liste plus loin...
 					free_mem3D[j] = free_mem3D[j + 1];
 				n_free_mem3D --;
-			}else if(decal == 1){ // On doit tout décaler pour faire rentrer la case vide...
+			}else if(decal == 1){ // On doit tout dï¿½caler pour faire rentrer la case vide...
 				n_free_mem3D ++;
 
 				for (j = n_free_mem3D; j > i; j --) // On recopie la liste plus loin...
@@ -294,7 +294,7 @@ s16 PA_3DCreateTex(void* obj_data, u16 width, u16 height, u8 type){
 			exit = 1;
 		}
 
-	i = free_mem3D[n_mem].mem_block; // On met la valeur de coté pour la renvoyer...
+	i = free_mem3D[n_mem].mem_block; // On met la valeur de cotï¿½ pour la renvoyer...
 	truenumber = (u32) &VRAM_A[i << 3];
 	used_mem3D[i] = block_size;   // Nombre de blocks
 
@@ -312,7 +312,7 @@ s16 PA_3DCreateTex(void* obj_data, u16 width, u16 height, u8 type){
 
 	if(free_mem3D[n_mem].free > 0)
 		free_mem3D[n_mem].mem_block += block_size; // S'il reste un bout libre, on garde...
-	else {// On doit tout décaler d'un cran... vers la gauche
+	else {// On doit tout dï¿½caler d'un cran... vers la gauche
 		for (i = n_mem; i < n_free_mem3D; i++) // On recopie la liste plus loin...
 			free_mem3D[i] = free_mem3D[i + 1];
 		--n_free_mem3D;
@@ -495,10 +495,9 @@ void PA_Init3DDual(){
 
 	PA_ResetSpriteSysScreen(1);
 
-	for (y = 0; y < 3; y ++)
-		for (x = 0; x < 4; x ++)
+	for (y = 0; y < 3; y ++)for (x = 0; x < 4; x ++){
 			PA_Create16bitSpriteFromGfx(1, x + y*4, x*8 + y*256, OBJ_SIZE_64X64, x*64, y*64);
-
+	}
 	PA_UpdateOAM1();
 
 	pa_3Ddual = 1;
