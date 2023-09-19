@@ -1,7 +1,7 @@
 #include <PA9.h>
 
 s16 gifwidth, gifheight;
-u16 *temppalette; // Utilisé pour stocker la palette des gifs...
+u16 *temppalette; // Utilisï¿½ pour stocker la palette des gifs...
 GifFileType* gifinfo;
 u8 *tempscreen; // Ecran temporaire...
 extern u8 PA_nBit[2];
@@ -81,7 +81,7 @@ int DGifGetLineByte(GifFileType *GifFile, GifPixelType *Line, int LineLen) {
 ******************************************************************************/
 
 int DecodeGif(const u8 *userData, u8 *ScreenBuff, u16* Palette, u8 nBits, s16 SWidth) {
-	int	i, j, Row, Col, Width, Height, ExtCode, Count;
+	int	i, j, Row, Col, Width, Height, ExtCode;
 	GifRecordType RecordType;
 	GifByteType *Extension;
 	GifFileType *GifFile;
@@ -137,7 +137,7 @@ int DecodeGif(const u8 *userData, u8 *ScreenBuff, u16* Palette, u8 nBits, s16 SW
 
 				if (GifFile->Image.Interlace) {
 					/* Need to perform 4 passes on the images: */
-					for (Count = i = 0; i < 4; i++) {
+					for (i = 0; i < 4; i++) {
 						for (j = Row + InterlacedOffset[i]; j < Row + Height;
 						        j += InterlacedJumps[i]) {
 							GifAssert(DGifGetLineByte(GifFile, (ScreenBuff + (((SWidth*j) + Col) << GifBits)), Width) != GIF_ERROR);
@@ -168,8 +168,6 @@ int DecodeGif(const u8 *userData, u8 *ScreenBuff, u16* Palette, u8 nBits, s16 SW
 
 				while (Extension != NULL) {
 					if (ExtCode == GRAPHICS_EXT_FUNC_CODE) {
-						s32 disposalMethod = (Extension[1] >> 2) & 7;
-						disposalMethod = 0;
 //						if((Extension[1] & 1) == 1) // transparency color exists
 //							pd->transColor = Extension[4];
 						int tmpDelay = 0;
@@ -212,7 +210,7 @@ int DecodeGif(const u8 *userData, u8 *ScreenBuff, u16* Palette, u8 nBits, s16 SW
 GifStop:
 	DGifCloseFile(GifFile);
 
-	//if (GifBits == 1) free(temppalette); // On vire la mémoire allouée
+	//if (GifBits == 1) free(temppalette); // On vire la mï¿½moire allouï¿½e
 
 	return 0;
 }
