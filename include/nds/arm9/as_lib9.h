@@ -209,7 +209,7 @@ typedef struct
 	/// Volume (0-127)
     u8  volume;
 	/// Pan (0-64-127)
-    s8  pan;
+    u8  pan;
 	/// Loop (0 or 1)
     u8  loop;
 	/// Priority
