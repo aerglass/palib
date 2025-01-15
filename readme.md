@@ -1,5 +1,4 @@
 # palib
-
-Ah yes, PAlib, my specialty, yeah I just kinda wanted to say that, PAlib is a good and fun library, it's not the most updated one, but it was for me the greatest one. This library setted me up for failure.
+this doesn't work anymore use antoniond's fork (github.com/antoniond/palib) on blocksds.
 
 https://aerglass.github.io/palib/
